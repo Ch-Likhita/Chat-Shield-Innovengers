@@ -10,14 +10,16 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://www.instagram.com/*"
+    "https://www.instagram.com/*",
+    "https://api-inference.huggingface.co/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
-      "matches": ["https://www.instagram.com/*"],
+      "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
   ],

@@ -258,3 +258,10 @@ chrome.runtime.onSuspend.addListener(() => {
 chrome.runtime.onStartup.addListener(() => {
   console.log('Instagram Safety Monitor starting up...');
 });
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  console.log("Background received:", msg);
+  if (msg.type === "ping") {
+    sendResponse("pong from background");
+  }
+  return true; // keep channel open for async
+});
