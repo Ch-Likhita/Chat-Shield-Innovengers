@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRIENDLY ZONE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .frame {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            padding: 30px;
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .profiles-container {
+            padding: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .profile-line {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #4ecdc4;
+        }
+        
+        .profile-line:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-right: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-info {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .profile-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .profile-status {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .rejection-count {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .rejection-count:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+        }
+        
+        .profile-line:nth-child(even) .profile-avatar {
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+        }
+        
+        .profile-line:nth-child(3n) .profile-avatar {
+            background: linear-gradient(45deg, #ffecd2, #fcb69f);
+        }
+        
+        .online-indicator {
+            width: 12px;
+            height: 12px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            border: 2px solid white;
+        }
+        
+        .avatar-container {
+            position: relative;
+        }
+        
+        /* Scrollbar styling */
+        .profiles-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .profiles-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        
+        .profiles-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="frame">
+        <div class="header">
+            FRIENDLY ZONE
+        </div>
+        
+        <div class="profiles-container">
+            <div class="profile-line">
+                <div class="avatar-container">
+                    <div class="profile-avatar">A</div>
+                    <div class="online-indicator"></div>
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <div class="profile-name">Alex Johnson</div>
+                        <div class="profile-status">Last seen 2 hours ago</div>
+                    </div>
+                    <div class="rejection-count">3 Rejections</div>
+                </div>
+            </div>
+            
+            <div class="profile-line">
+                <div class="avatar-container">
+                    <div class="profile-avatar">S</div>
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <div class="profile-name">Sarah Mitchell</div>
+                        <div class="profile-status">Online now</div>
+                    </div>
+                    <div class="rejection-count">7 Rejections</div>
+                </div>
+            </div>
+            
+            <div class="profile-line">
+                <div class="avatar-container">
+                    <div class="profile-avatar">M</div>
+                    <div class="online-indicator"></div>
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <div class="profile-name">Mike Rodriguez</div>
+                        <div class="profile-status">Active 15 minutes ago</div>
+                    </div>
+                    <div class="rejection-count">1 Rejection</div>
+                </div>
+            </div>
+            
+            <div class="profile-line">
+                <div class="avatar-container">
+                    <div class="profile-avatar">E</div>
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <div class="profile-name">Emily Chen</div>
+                        <div class="profile-status">Last seen yesterday</div>
+                    </div>
+                    <div class="rejection-count">12 Rejections</div>
+                </div>
+            </div>
+            
+            <div class="profile-line">
+                <div class="avatar-container">
+                    <div class="profile-avatar">J</div>
+                    <div class="online-indicator"></div>
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <div class="profile-name">James Wilson</div>
+                        <div class="profile-status">Online now</div>
+                    </div>
+                    <div class="rejection-count">5 Rejections</div>
+                </div>
+            </div>
+            
+            <div class="profile-line">
+                <div class="avatar-container">
+                    <div class="profile-avatar">L</div>
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <div class="profile-name">Lisa Thompson</div>
+                        <div class="profile-status">Last seen 1 hour ago</div>
+                    </div>
+                    <div class="rejection-count">9 Rejections</div>
+                </div>
+            </div>
+            
+            <div class="profile-line">
+                <div class="avatar-container">
+                    <div class="profile-avatar">D</div>
+                    <div class="online-indicator"></div>
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <div class="profile-name">David Park</div>
+                        <div class="profile-status">Active now</div>
+                    </div>
+                    <div class="rejection-count">2 Rejections</div>
+                </div>
+            </div>
+            
+            <div class="profile-line">
+                <div class="avatar-container">
+                    <div class="profile-avatar">K</div>
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <div class="profile-name">Katie Brown</div>
+                        <div class="profile-status">Last seen 3 days ago</div>
+                    </div>
+                    <div class="rejection-count">15 Rejections</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
