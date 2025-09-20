@@ -22,7 +22,7 @@
     }
   ],
   "action": {
-    "default_popup": "home-page.html",
+    "default_popup": "home-page-2.html",
     "default_title": "Instagram Safety Monitor"
   },
   "icons": {
