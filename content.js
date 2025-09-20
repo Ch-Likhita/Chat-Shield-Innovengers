@@ -16,11 +16,6 @@ class ChatMonitor {
     
     console.log('Safety Monitor: Initializing content script');
     
-    // Check if we're on a supported social media site (optional: customize this check)
-    // if (!window.location.hostname.includes('instagram.com')) {
-    //   return;
-    // }
-    
     // Initialize Tesseract.js for OCR
     await this.initializeOCR();
     
@@ -86,24 +81,35 @@ class ChatMonitor {
     try {
       console.log('Starting chat scan...');
       
-      // First, try to extract text directly from DOM
+      let messagesToAnalyze = [];
+
+      // First, try to extract text directly from the DOM
       const domMessages = this.extractMessagesFromDOM();
-      
       if (domMessages.length > 0) {
         console.log(`Found ${domMessages.length} messages in DOM`);
-        const flaggedMessages = await this.analyzeMessages(domMessages);
-        this.reportFlaggedMessages(flaggedMessages);
-        return { success: true, flaggedMessages };
+        messagesToAnalyze = messagesToAnalyze.concat(domMessages);
       } else {
         // Fallback: Use OCR if no messages found in DOM
+        console.log('No messages found in DOM. Falling back to OCR.');
         const ocrMessages = await this.extractMessagesWithOCR();
-        if (ocrMessages.length > 0) {
-          const flaggedMessages = await this.analyzeMessages(ocrMessages);
-          this.reportFlaggedMessages(flaggedMessages);
-          return { success: true, flaggedMessages };
-        } else {
-          return { success: true, flaggedMessages: [] };
+        messagesToAnalyze = messagesToAnalyze.concat(ocrMessages);
+      }
+      
+      if (messagesToAnalyze.length > 0) {
+        console.log('Sending messages to background script for analysis.');
+        
+        const analysisResult = await chrome.runtime.sendMessage({
+          action: 'analyze_text',
+          text: messagesToAnalyze.join('\n')
+        });
+
+        if (analysisResult.success) {
+          console.log('Analysis completed. Flagged messages:', analysisResult.flaggedMessages);
         }
+        return { success: true };
+      } else {
+        console.log('No messages to analyze.');
+        return { success: true, flaggedMessages: [] };
       }
     } catch (error) {
       console.error('Error during chat scan:', error);
@@ -111,28 +117,21 @@ class ChatMonitor {
     }
   }
 
-  // Placeholder methods for demonstration
   extractMessagesFromDOM() {
-    // Implement logic to extract messages from the DOM for any social media platform
+    // This is the part that will need to be customized for each app.
+    console.warn("Warning: extractMessagesFromDOM() is not customized for this site and will likely fail.");
     return [];
-  }
-
-  async analyzeMessages(messages) {
-    // Implement logic to analyze messages
-    return [];
-  }
-
-  reportFlaggedMessages(flaggedMessages) {
-    // Implement logic to report flagged messages
   }
 
   async extractMessagesWithOCR() {
-    // Implement logic to extract messages using OCR
+    // This is a placeholder for OCR functionality.
+    console.log('Performing OCR to extract messages...');
     return [];
   }
-
+  
   setupMutationObserver() {
-    // Implement logic to observe DOM changes for new messages
+    // This is a placeholder for setting up an observer to watch for new messages.
+    console.log('Setting up mutation observer...');
   }
 
   toggleAutoScan(enabled) {
@@ -149,7 +148,10 @@ class ChatMonitor {
     if (this.scanInterval) clearInterval(this.scanInterval);
     this.autoScanEnabled = true;
     this.scanInterval = setInterval(() => {
-      this.scanCurrentChat();
+      // A generic, non-specific check
+      if (document.body) {
+        this.scanCurrentChat();
+      }
     }, interval);
   }
 }

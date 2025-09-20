@@ -1,8 +1,6 @@
-// background.js - Service Worker for Chrome Extension
-class InstagramSafetyMonitor {
+// background.js - Service Worker for ChatShield
+class ChatShieldBackground {
   constructor() {
-    this.isScanning = false;
-    this.scanInterval = null;
     this.init();
   }
 
@@ -22,7 +20,7 @@ class InstagramSafetyMonitor {
 
   async handleInstall(details) {
     if (details.reason === 'install') {
-      console.log('Instagram Safety Monitor installed');
+      console.log('ChatShield installed');
       
       // Set default settings
       await chrome.storage.local.set({
@@ -32,9 +30,9 @@ class InstagramSafetyMonitor {
         detectionHistory: []
       });
       
-      // Open welcome/setup page
+      // Open home page on first install
       chrome.tabs.create({
-        url: chrome.runtime.getURL('welcome.html')
+        url: chrome.runtime.getURL('home-page.html')
       });
     }
   }
@@ -46,12 +44,11 @@ class InstagramSafetyMonitor {
       scanInterval: 30000,
       detectionHistory: [],
       abusePatterns: [
-        // Basic abuse patterns - can be expanded
         'kill yourself', 'kys', 'die', 'hate you', 'stupid',
         'idiot', 'loser', 'ugly', 'fat', 'worthless',
         'bitch', 'slut', 'whore', 'bastard'
       ],
-      trustedDomains: ['instagram.com']
+      trustedDomains: [] // Removed Instagram specific domain
     };
 
     const current = await chrome.storage.local.get(Object.keys(defaultSettings));
@@ -68,50 +65,48 @@ class InstagramSafetyMonitor {
       await chrome.storage.local.set(updates);
     }
   }
-
+  
   async handleMessage(message, sender, sendResponse) {
     try {
       switch (message.action) {
+        case 'analyze_text':
+          const analysisResult = await this.analyzeTextForAbuse(message.text);
+          sendResponse({
+            success: analysisResult.success,
+            flaggedMessages: analysisResult.isAbusive ? [message.text] : []
+          });
+          return true;
+          
+        case 'toggleAutoScan':
+            await chrome.storage.local.set({ autoScan: message.enabled });
+            sendResponse({ success: true });
+            return;
+            
         case 'captureScreenshot':
           return this.captureScreenshot(sender.tab.id);
-          
-        case 'analyzeText':
-          return this.analyzeTextForAbuse(message.text, message.options);
-          
-        case 'saveDetection':
-          return this.saveDetectionResult(message.data);
-          
-        case 'getSettings':
-          return chrome.storage.local.get();
-          
-        case 'updateSettings':
-          return chrome.storage.local.set(message.settings);
-          
+
         default:
           throw new Error(`Unknown action: ${message.action}`);
       }
     } catch (error) {
       console.error('Background script error:', error);
-      return { success: false, error: error.message };
+      sendResponse({ success: false, error: error.message });
+      return true;
     }
   }
 
   async handleTabUpdate(tabId, changeInfo, tab) {
-    if (changeInfo.status === 'complete' && 
-        tab.url && 
-        tab.url.includes('instagram.com')) {
-      
-      // Check if auto-scan is enabled
+    // Check if auto-scan is enabled and the tab has finished loading
+    if (changeInfo.status === 'complete') {
       const settings = await chrome.storage.local.get(['autoScan']);
       if (settings.autoScan) {
-        // Inject content script and enable auto-scanning
         try {
+          // This will execute the content script on any page that updates
           await chrome.scripting.executeScript({
             target: { tabId: tabId },
             files: ['content.js']
           });
           
-          // Enable auto-scan on the page
           chrome.tabs.sendMessage(tabId, {
             action: 'enableAutoScan'
           }).catch(() => {
@@ -130,7 +125,6 @@ class InstagramSafetyMonitor {
         format: 'png',
         quality: 90
       });
-      
       return { success: true, dataUrl };
     } catch (error) {
       console.error('Screenshot capture failed:', error);
@@ -138,130 +132,58 @@ class InstagramSafetyMonitor {
     }
   }
 
-  async analyzeTextForAbuse(text, options = {}) {
-    const settings = await chrome.storage.local.get(['abusePatterns', 'highSensitivity']);
-    const patterns = settings.abusePatterns || [];
-    const highSensitivity = settings.highSensitivity !== false;
-    
-    // Normalize text for analysis
-    const normalizedText = text.toLowerCase().trim();
-    
-    if (!normalizedText) {
+  async analyzeTextForAbuse(text) {
+    const HUGGING_FACE_TOKEN = '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';
+    const MODEL_API_URL = 'https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-offensive';
+
+    if (!text) {
       return { success: true, isAbusive: false, confidence: 0 };
     }
 
-    // Basic pattern matching
-    let abuseScore = 0;
-    let matchedPatterns = [];
-    
-    for (const pattern of patterns) {
-      if (normalizedText.includes(pattern.toLowerCase())) {
-        abuseScore += 1;
-        matchedPatterns.push(pattern);
-      }
-    }
-
-    // Advanced analysis (simplified NLP)
-    const abuseIndicators = this.getAbuseIndicators();
-    const sentimentScore = this.analyzeSentiment(normalizedText, abuseIndicators);
-    
-    // Combine scores
-    const finalScore = (abuseScore * 0.6) + (sentimentScore * 0.4);
-    const threshold = highSensitivity ? 0.3 : 0.6;
-    const isAbusive = finalScore > threshold;
-    
-    return {
-      success: true,
-      isAbusive,
-      confidence: Math.min(finalScore, 1.0),
-      matchedPatterns,
-      details: {
-        patternScore: abuseScore,
-        sentimentScore,
-        finalScore,
-        threshold
-      }
-    };
-  }
-
-  getAbuseIndicators() {
-    return {
-      threats: ['kill', 'die', 'hurt', 'harm', 'destroy'],
-      insults: ['stupid', 'idiot', 'loser', 'ugly', 'fat', 'worthless'],
-      profanity: ['damn', 'shit', 'fuck', 'bitch', 'bastard'],
-      harassment: ['hate', 'disgusting', 'pathetic', 'failure'],
-      cyberbullying: ['everyone hates', 'nobody likes', 'kill yourself', 'end it all']
-    };
-  }
-
-  analyzeSentiment(text, indicators) {
-    let negativeScore = 0;
-    let totalWords = text.split(/\s+/).length;
-    
-    for (const [category, words] of Object.entries(indicators)) {
-      for (const word of words) {
-        if (text.includes(word)) {
-          // Weight different categories
-          const weight = category === 'threats' || category === 'cyberbullying' ? 2 : 1;
-          negativeScore += weight;
-        }
-      }
-    }
-    
-    // Normalize by text length
-    return totalWords > 0 ? Math.min(negativeScore / totalWords, 1.0) : 0;
-  }
-
-  async saveDetectionResult(data) {
     try {
-      const history = await chrome.storage.local.get(['detectionHistory']);
-      const historyArray = history.detectionHistory || [];
-      
-      historyArray.push({
-        ...data,
-        timestamp: new Date().toISOString(),
-        id: Date.now()
+      const response = await fetch(MODEL_API_URL, {
+        headers: {
+          'Authorization': `Bearer ${HUGGING_FACE_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({ inputs: text })
       });
-      
-      // Keep only last 1000 entries
-      if (historyArray.length > 1000) {
-        historyArray.splice(0, historyArray.length - 1000);
-      }
-      
-      await chrome.storage.local.set({ detectionHistory: historyArray });
-      
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  }
 
-  // Utility method to check if current tab is Instagram
-  async isInstagramTab(tabId) {
-    try {
-      const tab = await chrome.tabs.get(tabId);
-      return tab.url && tab.url.includes('instagram.com');
-    } catch {
-      return false;
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      
+      const offensiveData = result[0].find(item => item.label === 'OFF');
+
+      const settings = await chrome.storage.local.get(['highSensitivity']);
+      const threshold = settings.highSensitivity ? 0.5 : 0.8; 
+
+      const isAbusive = offensiveData && offensiveData.score >= threshold;
+
+      return {
+        success: true,
+        isAbusive,
+        confidence: offensiveData ? offensiveData.score : 0
+      };
+      
+    } catch (error) {
+      console.error('Hugging Face API call failed:', error);
+      return { success: false, isAbusive: false, confidence: 0, error: error.message };
     }
   }
 }
 
 // Initialize the background service
-const safetyMonitor = new InstagramSafetyMonitor();
+const safetyMonitor = new ChatShieldBackground();
 
 // Handle extension lifecycle
 chrome.runtime.onSuspend.addListener(() => {
-  console.log('Instagram Safety Monitor suspending...');
+  console.log('ChatShield suspending...');
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  console.log('Instagram Safety Monitor starting up...');
-});
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  console.log("Background received:", msg);
-  if (msg.type === "ping") {
-    sendResponse("pong from background");
-  }
-  return true; // keep channel open for async
+  console.log('ChatShield starting up...');
 });

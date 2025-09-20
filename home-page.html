@@ -329,6 +329,58 @@
             box-shadow: 0 12px 40px rgba(83, 82, 237, 0.2);
         }
 
+        /* Toggle switch specific styles */
+        .toggle-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #555;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #20b2aa;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
         .action-icon {
             width: 32px;
             height: 32px;
@@ -544,7 +596,6 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Status Bar (Mobile) -->
         <div class="status-bar">
             <div class="status-left">
                 <span>9:41</span>
@@ -554,16 +605,13 @@
             </div>
         </div>
 
-        <!-- App Header -->
         <header class="app-header">
             <div class="header-content">
                 <h1 class="app-title">ChatShield</h1>
             </div>
         </header>
 
-        <!-- Main App Content -->
         <main class="app-content">
-            <!-- User Profile Card -->
             <div class="profile-card fade-in-up">
                 <div class="profile-header">
                     <div class="profile-picture">
@@ -585,22 +633,27 @@
                 </div>
             </div>
 
-            <!-- Action Cards -->
             <div class="actions-grid">
-                <div class="action-card instances fade-in-up stagger-1" onclick="handleAction('instances')">
+                <div class="action-card instances fade-in-up stagger-1" id="scan-now-btn">
                     <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#ff6b35" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3-10.5a2.25 2.25 0 0 1 2.25-2.25H19.5a2.25 2.25 0 0 1 2.25 2.25v6.75a2.25 2.25 0 0 1-2.25 2.25H17.25a2.25 2.25 0 0 1-2.25-2.25V10.5zM4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5z"/>
                     </svg>
-                    <h3 class="action-title">Instances of Abuse</h3>
-                    <p class="action-description">View documented harassment cases and incident logs</p>
+                    <h3 class="action-title">Scan Now</h3>
+                    <p class="action-description">Manually scan for abusive messages immediately</p>
                 </div>
 
-                <div class="action-card resolve fade-in-up stagger-2" onclick="handleAction('resolve')">
+                <div class="action-card resolve fade-in-up stagger-2" id="auto-scan-card">
+                    <div class="toggle-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="auto-scan-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
                     <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#20b2aa" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                     </svg>
-                    <h3 class="action-title">Resolve Yourself</h3>
-                    <p class="action-description">Access tools and resources to handle issues independently</p>
+                    <h3 class="action-title">Auto Scan</h3>
+                    <p class="action-description">Enable automatic scanning in Instagram chats</p>
                 </div>
 
                 <div class="action-card report fade-in-up stagger-3" onclick="handleAction('report')">
@@ -622,7 +675,6 @@
             </div>
         </main>
 
-        <!-- Bottom Navigation -->
         <nav class="bottom-nav">
             <div class="nav-items">
                 <div class="nav-item active" onclick="setActiveTab(this, 'home')">
@@ -655,7 +707,6 @@
         </nav>
     </div>
 
-    <!-- Notification Toast -->
     <div class="notification-toast" id="notificationToast"></div>
 
     <script>
@@ -682,6 +733,43 @@
             };
 
             showNotification(actions[action]);
+        }
+        
+        // New function to handle the auto-scan toggle
+        async function toggleAutoScan(element) {
+            addHapticFeedback(element);
+            const isEnabled = element.checked;
+            
+            await chrome.storage.local.set({ autoScan: isEnabled });
+            
+            showNotification(`Auto Scan ${isEnabled ? 'Enabled' : 'Disabled'}`);
+            
+            // Send message to background script to trigger logic
+            chrome.runtime.sendMessage({
+                action: 'toggleAutoScan',
+                enabled: isEnabled
+            });
+        }
+        
+        // Manual scan function
+        async function manualScan() {
+            addHapticFeedback(event.currentTarget);
+            showNotification('Manually scanning chat...');
+            
+            // Get the active tab and send a message to its content script
+            const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+            if (tabs.length > 0) {
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'scanChat' }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        console.error('Error sending message:', chrome.runtime.lastError);
+                        showNotification('Error: Could not scan chat.');
+                        return;
+                    }
+                    if (response && response.success) {
+                        showNotification('Scan completed!');
+                    }
+                });
+            }
         }
 
         function setActiveTab(element, tab) {
@@ -725,7 +813,19 @@
         }
 
         // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Add event listener to the manual scan button
+            document.getElementById('scan-now-btn').addEventListener('click', manualScan);
+
+            // Add event listener to the auto-scan toggle switch
+            document.getElementById('auto-scan-toggle').addEventListener('change', (event) => {
+                toggleAutoScan(event.target);
+            });
+            
+            // Set the initial state of the auto-scan toggle
+            const settings = await chrome.storage.local.get(['autoScan']);
+            document.getElementById('auto-scan-toggle').checked = settings.autoScan;
+            
             // Add staggered animation to action cards
             const cards = document.querySelectorAll('.action-card');
             cards.forEach((card, index) => {
@@ -740,3 +840,5 @@
             }
         }, { passive: false });
     </script>
+</body>
+</html>
