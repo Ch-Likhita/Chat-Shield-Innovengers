@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Instagram Chat Safety Monitor",
+  "name": "Chat Sheild",
   "version": "1.0.0",
   "description": "Detects abusive messages in Instagram web chats using OCR and NLP analysis",
   "permissions": [
@@ -18,8 +18,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.instagram.com/*"],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "js": ["content.js"]
     }
   ],
   "action": {
@@ -27,9 +26,9 @@
     "default_title": "Instagram Safety Monitor"
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon16.jpg",
+    "48": "icons/icon48.jpg",
+    "128": "icons/icon128.jpg"
   },
   "web_accessible_resources": [
     {
