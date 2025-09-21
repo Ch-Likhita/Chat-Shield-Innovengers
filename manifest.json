@@ -1,16 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "Chat Sheild",
-  "version": "1.0.0",
-  "description": "Detects abusive messages in Instagram web chats using OCR and NLP analysis",
+  "name": "ChatShield - Smart Harassment Detection",
+  "version": "2.0.0",
+  "description": "AI-powered harassment detection and self-help platform for social media safety",
   "permissions": [
     "activeTab",
     "storage",
     "tabs",
-    "scripting"
+    "scripting",
+    "downloads"
   ],
   "host_permissions": [
-    "<all_urls>"
+    "<all_urls>",
+    "https://api-inference.huggingface.co/*"
   ],
   "background": {
     "service_worker": "background.js",
@@ -18,17 +20,38 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "matches": [
+        "https://*.instagram.com/*",
+        "https://*.facebook.com/*",
+        "https://*.twitter.com/*",
+        "https://*.discord.com/*",
+        "https://*.tiktok.com/*",
+        "https://*.snapchat.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
     }
   ],
   "action": {
-    "default_popup": "home-page-2.html",
-    "default_title": "Instagram Safety Monitor"
+    "default_popup": "main-page.html",
+    "default_title": "ChatShield - Harassment Protection",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "icons": {
-    "16": "icons/icon16.jpg",
-    "48": "icons/icon48.jpg",
-    "128": "icons/icon128.jpg"
-  }
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["main-page.html", "popup.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

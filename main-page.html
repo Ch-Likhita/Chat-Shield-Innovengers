@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>ChatShield - Smart Harassment Protection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Home Page -->
+        <div class="page active" id="homePage">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div>9:41</div>
+                <div>ChatShield</div>
+                <div>100%</div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="app-content">
+                <!-- User Profile Card -->
+                <div class="profile-card fade-in-up">
+                    <div class="profile-header">
+                        <div class="profile-picture">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div class="profile-info">
+                            <h2>Sarah</h2>
+                            <div class="profile-status">Protected User</div>
+                        </div>
+                    </div>
+                    
+                    <div class="protection-status">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>SafeGuard Active</span>
+                    </div>
+                </div>
+
+                <!-- Action Cards Grid -->
+                <div class="actions-grid">
+                    <div class="action-card instances fade-in-up stagger-1" data-action="instances">
+                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#ff6b35" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3-10.5a2.25 2.25 0 0 1 2.25-2.25H19.5a2.25 2.25 0 0 1 2.25 2.25v6.75a2.25 2.25 0 0 1-2.25 2.25H17.25a2.25 2.25 0 0 1-2.25-2.25V10.5zM4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5z"/>
+                        </svg>
+                        <h3 class="action-title">Instances of Abuse</h3>
+                        <p class="action-description">View documented harassment cases and incident logs</p>
+                    </div>
+
+                    <div class="action-card resolve fade-in-up stagger-2" data-action="resolve">
+                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#20b2aa" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                        <h3 class="action-title">Resolve Yourself</h3>
+                        <p class="action-description">Access tools and resources to handle issues independently</p>
+                    </div>
+
+                    <div class="action-card report fade-in-up stagger-3" data-action="report">
+                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#ff4757" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+                        </svg>
+                        <h3 class="action-title">Report Issue</h3>
+                        <p class="action-description">Report serious harassment to authorities</p>
+                    </div>
+
+                    <div class="action-card monitor fade-in-up stagger-4" data-action="monitor">
+                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#5352ed" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                        <h3 class="action-title">Friendly Zone</h3>
+                        <p class="action-description">Filter false alarms and friendly interactions</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Instances of Abuse Page -->
+        <div class="page" id="instancesPage">
+            <header class="app-header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button class="back-button">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <h1 class="page-title">Instances of Abuse</h1>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn" data-action="filter">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                            </svg>
+                        </button>
+                        <button class="header-btn" data-action="export">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="instances-content">
+                <div class="page-header fade-in-up">
+                    <div class="page-header-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3-10.5a2.25 2.25 0 0 1 2.25-2.25H19.5a2.25 2.25 0 0 1 2.25 2.25v6.75a2.25 2.25 0 0 1-2.25 2.25H17.25a2.25 2.25 0 0 1-2.25-2.25V10.5zM4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5z"/>
+                        </svg>
+                    </div>
+                    <h1>Documented Cases</h1>
+                    <p>Review your incident history and recent harassment cases. All data is securely encrypted and stored locally.</p>
+                </div>
+
+                <div class="section-card recent fade-in-up stagger-1">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="section-title">Recent Cases</h2>
+                            <p class="section-subtitle">Active incidents requiring attention</p>
+                        </div>
+                    </div>
+                    <div id="recentCases"></div>
+                </div>
+
+                <div class="section-card history fade-in-up stagger-2">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="section-title">Your History</h2>
+                            <p class="section-subtitle">Past incidents and resolved cases</p>
+                        </div>
+                    </div>
+                    <div id="historyCases"></div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Resolve Yourself Page -->
+        <div class="page" id="resolvePage">
+            <header class="app-header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button class="back-button">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <h1 class="page-title">Resolve Yourself</h1>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn" data-action="help">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c0-1.072.859-1.94 1.92-1.94s1.92.868 1.92 1.94c0 .967-.576 1.688-1.92 2.543V11m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="instances-content">
+                <div class="page-header fade-in-up">
+                    <div class="page-header-icon" style="background: linear-gradient(45deg, #20b2aa, #26de81);">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                    </div>
+                    <h1>Self-Help Resources</h1>
+                    <p>Learn from real case studies and get personalized guidance to handle harassment situations effectively and safely.</p>
+                </div>
+
+                <div class="resolve-options fade-in-up stagger-1">
+                    <div class="resolve-option" data-resolve-action="case-studies">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#20b2aa">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <h3>Case Studies</h3>
+                            <p>Learn from real scenarios and proven solutions</p>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="resolve-option" data-resolve-action="ai-chat">
+                        <div class="option-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#8b45ff">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/>
+                            </svg>
+                        </div>
+                        <div class="option-content">
+                            <h3>AI Support Chat</h3>
+                            <p>Get personalized advice and emotional support</p>
+                        </div>
+                        <div class="option-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Studies Section -->
+                <div class="section-card resolve-section fade-in-up stagger-2" id="caseStudiesSection">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="section-title">Success Stories & Solutions</h2>
+                            <p class="section-subtitle">Learn from others who successfully resolved similar situations</p>
+                        </div>
+                    </div>
+                    <div id="caseStudiesList"></div>
+                </div>
+
+                <!-- AI Chat Section -->
+                <div class="section-card ai-chat-section fade-in-up stagger-3" id="aiChatSection" style="display: none;">
+                    <div class="section-header">
+                        <div class="section-icon" style="background: rgba(139, 69, 255, 0.2);">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" stroke="#8b45ff"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="section-title">AI Support Assistant</h2>
+                        </div>
+                    </div>
+
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="chat-message ai-message">
+                                <div class="message-avatar">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 8.25-3.694 8.25-8.25s-3.28-8.25-8.25-8.25S3.75 7.694 3.75 12s3.28 8.25 8.25 8.25z"/>
+                                    </svg>
+                                </div>
+                                <div class="message-content">
+                                    <p>Hi! I'm here to help you navigate through difficult situations safely and effectively. What would you like help with today?</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-topics">
+                            <div class="quick-topic" data-message="I'm receiving threatening messages">
+                                <span>Threatening messages</span>
+                            </div>
+                            <div class="quick-topic" data-message="Someone won't stop contacting me">
+                                <span>Persistent contact</span>
+                            </div>
+                            <div class="quick-topic" data-message="I'm feeling overwhelmed">
+                                <span>Feeling overwhelmed</span>
+                            </div>
+                            <div class="quick-topic" data-message="How do I document harassment?">
+                                <span>Documentation help</span>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-container">
+                            <div class="chat-input-wrapper">
+                                <input type="text" id="chatInput" placeholder="Describe your situation..." maxlength="500">
+                                <button class="send-button" id="sendButton">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Friendly Zone Page -->
+        <div class="page" id="friendlyZonePage">
+            <header class="app-header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button class="back-button">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <h1 class="page-title">Friendly Zone</h1>
+                    </div>
+                </div>
+            </header>
+
+            <main class="instances-content">
+                <div class="page-header fade-in-up" style="border: 1px solid rgba(83, 82, 237, 0.3);">
+                    <div class="page-header-icon" style="background: linear-gradient(45deg, #5352ed, #26de81);">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                    </div>
+                    <h1>Friendly Zone</h1>
+                    <p>Profiles cleared of false harassment allegations by AI detection.</p>
+                </div>
+                <div id="friendlyProfiles"></div>
+            </main>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-items">
+                <div class="nav-item active" data-tab="home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+                    </svg>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item" data-tab="alerts">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
+                    </svg>
+                    <span>Alerts</span>
+                </div>
+                <div class="nav-item" data-tab="profile">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>Profile</span>
+                </div>
+                <div class="nav-item" data-tab="settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>Settings</span>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast"></div>
+
+    <!-- Load external files -->
+    <script src="main-page.js"></script>
+</body>
+</html>
